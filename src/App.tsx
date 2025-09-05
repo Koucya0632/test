@@ -1,46 +1,15 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import PlanetScene from "./PlanetScene";
 import "./App.css";
 
 export default function App() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [showEyes, setShowEyes] = useState(true);
-  const [videoPlaying, setVideoPlaying] = useState(false);
   const [eyesDisappearing, setEyesDisappearing] = useState(false);
-
-  useEffect(() => {
-    const video = videoRef.current; 
-    if (video) {
-      // 設置影片屬性確保自動播放
-      video.muted = false;
-      video.loop = true;
-      video.autoplay = true;
-      
-      // 嘗試播放影片
-      const playVideo = async () => {
-        try {
-          await video.play();
-          console.log("影片自動播放成功");
-        } catch (error) {
-          console.log("自動播放被阻止，需要用戶互動");
-        }
-      };
-      
-      // 立即嘗試播放
-      playVideo();
-      
-      // 監聽影片載入完成事件
-      video.addEventListener('loadeddata', playVideo);
-      
-      return () => {
-        video.removeEventListener('loadeddata', playVideo);
-      };
-    }
-  }, []);
 
   const handleEyesClick = async () => {
     const video = videoRef.current;
-    if (video && !videoPlaying) {
+    if (video && video.paused) {
       try {
         // 開始眼睛消失動畫
         setEyesDisappearing(true);
@@ -48,7 +17,6 @@ export default function App() {
         // 延遲播放影片，讓動畫完成
         setTimeout(async () => {
           await video.play();
-          setVideoPlaying(true);
           setShowEyes(false);
           console.log("影片播放成功，眼睛消失");
         }, 1000); // 1秒後開始播放影片
@@ -65,10 +33,8 @@ export default function App() {
     if (video) {
       if (video.paused) {
         video.play();
-        setVideoPlaying(true);
       } else {
         video.pause();
-        setVideoPlaying(false);
       }
     }
   };
