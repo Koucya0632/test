@@ -7,7 +7,7 @@ import * as THREE from "three";
 function Nebula() {
   const groupRef = useRef<THREE.Group>(null);
   
-  useFrame((state) => {
+  useFrame(() => {
     if (groupRef.current) {
       groupRef.current.rotation.y += 0.0003;
       groupRef.current.rotation.x += 0.0001;
@@ -41,7 +41,7 @@ function Nebula() {
 function ShootingStars() {
   const groupRef = useRef<THREE.Group>(null);
   
-  useFrame((state) => {
+  useFrame(() => {
     if (groupRef.current) {
       groupRef.current.rotation.y += 0.002;
       groupRef.current.rotation.x += 0.001;
@@ -75,7 +75,7 @@ function ShootingStars() {
 function EnergyRings() {
   const ringRef = useRef<THREE.Mesh>(null);
   
-  useFrame((state) => {
+  useFrame(() => {
     if (ringRef.current) {
       ringRef.current.rotation.z += 0.01;
     }
