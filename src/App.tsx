@@ -8,23 +8,33 @@ export default function App() {
   const [eyesDisappearing, setEyesDisappearing] = useState(false);
 
   const handleEyesClick = async () => {
+    console.log("眼睛被點擊了！");
     const video = videoRef.current;
-    if (video && video.paused) {
+    if (video) {
+      console.log("影片狀態:", video.paused ? "暫停" : "播放中");
       try {
         // 開始眼睛消失動畫
         setEyesDisappearing(true);
+        console.log("開始眼睛消失動畫");
         
         // 延遲播放影片，讓動畫完成
         setTimeout(async () => {
-          await video.play();
-          setShowEyes(false);
-          console.log("影片播放成功，眼睛消失");
+          try {
+            await video.play();
+            setShowEyes(false);
+            console.log("影片播放成功，眼睛消失");
+          } catch (playError) {
+            console.log("影片播放失敗:", playError);
+            setEyesDisappearing(false);
+          }
         }, 1000); // 1秒後開始播放影片
         
       } catch (error) {
-        console.log("影片播放失敗:", error);
+        console.log("處理錯誤:", error);
         setEyesDisappearing(false);
       }
+    } else {
+      console.log("找不到影片元素");
     }
   };
 
@@ -46,7 +56,6 @@ export default function App() {
         ref={videoRef}
         autoPlay 
         loop 
-        muted
         playsInline 
         className="background-video"
         onClick={handleVideoClick}
